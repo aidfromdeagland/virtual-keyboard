@@ -1,0 +1,30 @@
+{
+  "name": "virtual-keyboard",
+  "version": "1.0.0",
+  "description": "virtual keyboard task for RSschool 2020q1",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aidfromdeagland/virtual-keyboard.git"
+  },
+  "keywords": [
+    "rolling",
+    "scopes",
+    "school"
+  ],
+  "author": "stanislau laniuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aidfromdeagland/virtual-keyboard/issues"
+  },
+  "homepage": "https://github.com/aidfromdeagland/virtual-keyboard#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}
