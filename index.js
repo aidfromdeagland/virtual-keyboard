@@ -1,6 +1,6 @@
-import Keyboard from './src/keyboard';
+import Keyboard from './src/keyboard.js';
 
-document.addEventListener('load', () => {
+window.addEventListener('load', () => {
   const keyboard = new Keyboard();
   keyboard.init();
 });

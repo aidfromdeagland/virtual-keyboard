@@ -1,4 +1,4 @@
-import keyMap from './button';
+import keyMap from './button.js';
 
 class Keyboard {
   constructor() {
@@ -21,7 +21,9 @@ class Keyboard {
     keyCodes.forEach((x, index) => {
       const button = document.createElement('div');
       button.textContent = keyValues[index].key;
-      button.classList.add(`keyboard__button keyboard__button_${x}`);
+      button.classList.add('keyboard__button');
+      button.classList.add(`keyboard__button_${x}`);
+      fragment.appendChild(button);
     });
 
     return fragment;
