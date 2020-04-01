@@ -12,11 +12,30 @@ body {
   --keySize: 5vw;
 }
 
-.keyboard {
+.wrapper {
   margin: 0 auto;
+  width: 85vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.keyboard {
   display: flex;
   flex-wrap: wrap;
-  width: 85vw;
+}
+
+.textarea {
+  margin-bottom: 5vw;
+  min-height: 30vw;
+  box-sizing: border-box;
+  resize: none;
+  font-size: 2vw;
+  overflow: auto;
+  border: 2px solid #aaaaaa;
+  border-radius: 1vw;
+  background-color: #dddddd;
 }
 
 .keyboard__button {

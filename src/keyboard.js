@@ -8,10 +8,16 @@ class Keyboard {
   }
 
   init() {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+    const textarea = document.createElement('textarea');
+    textarea.classList.add('textarea');
+    wrapper.appendChild(textarea);
     const keyboard = document.createElement('div');
     keyboard.classList.add('keyboard');
+    wrapper.appendChild(keyboard);
     keyboard.appendChild(this.addButtons());
-    document.body.appendChild(keyboard);
+    document.body.appendChild(wrapper);
   }
 
   addButtons() {
