@@ -9,17 +9,52 @@ html {
 body {
   padding: 0;
   margin: 0;
+  --keySize: 5vw;
 }
 
 .keyboard {
-  display: grid;
-  grid-template-columns: repeat(15, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 10px 5px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: 85vw;
 }
 
 .keyboard__button {
+  margin: 0.3vw;
+  height: var(--keySize);
+  padding-top: 2vw;
   background-color: gray;
-  width: 30px;
-  height: 30px;
+  text-align: center;
+  font-size: 1.6vw;
+  line-height: 1;
+  border-radius: 0.5vw;
+}
+
+.keyboard__button_width_100 {
+  width: var(--keySize);
+}
+
+.keyboard__button_width_125 {
+  width: calc(var(--keySize) * 1.25);
+  flex-grow: 1;
+}
+
+.keyboard__button_width_150 {
+  width: calc(var(--keySize) * 1.5);
+  flex-grow: 1;
+}
+
+.keyboard__button_width_175 {
+  width: calc(var(--keySize) * 1.75);
+  flex-grow: 1;
+}
+
+.keyboard__button_width_200 {
+  width: calc(var(--keySize) * 2);
+  flex-grow: 1;
+}
+
+.keyboard__button_width_700 {
+  width: calc(var(--keySize) * 7);
+  flex-grow: 1;
 }

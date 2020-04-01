@@ -17,12 +17,11 @@ class Keyboard {
   addButtons() {
     const fragment = document.createDocumentFragment();
     const keyCodes = Object.keys(keyMap);
-    const keyValues = Object.values(keyMap);
-    keyCodes.forEach((x, index) => {
+    keyCodes.forEach((x) => {
       const button = document.createElement('div');
-      button.textContent = keyValues[index].key;
+      button.textContent = keyMap[x].key;
       button.classList.add('keyboard__button');
-      button.classList.add(`keyboard__button_${x}`);
+      button.classList.add(`keyboard__button_width_${keyMap[x].width}`);
       fragment.appendChild(button);
     });
 
