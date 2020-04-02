@@ -27,9 +27,11 @@ body {
 }
 
 .textarea {
-  margin-bottom: 5vw;
-  min-height: 30vw;
+  margin-bottom: 3vw;
+  min-height: 15vw;
+  max-height: 35vh;
   box-sizing: border-box;
+  padding: 1vw;
   resize: none;
   font-size: 2vw;
   overflow: auto;
@@ -42,11 +44,17 @@ body {
   margin: 0.3vw;
   height: var(--keySize);
   padding-top: 2vw;
-  background-color: gray;
+  background-color: #777777;
   text-align: center;
   font-size: 1.6vw;
   line-height: 1;
   border-radius: 0.5vw;
+}
+
+.keyboard__button_active {
+  transform-origin: center;
+  transform:scale(0.9);
+  background-color: #8aff00;
 }
 
 .keyboard__button_width_100 {

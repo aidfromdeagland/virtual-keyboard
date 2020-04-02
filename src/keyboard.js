@@ -3,7 +3,7 @@ import keyMap from './button.js';
 class Keyboard {
   constructor() {
     this.lang = 'en';
-    this.shifted = false;
+    this.capitalisation = 'normal';
     this.capslocked = false;
   }
 
@@ -18,6 +18,14 @@ class Keyboard {
     wrapper.appendChild(keyboard);
     keyboard.appendChild(this.addButtons());
     document.body.appendChild(wrapper);
+    document.addEventListener('keydown', (evt) => {
+      evt.preventDefault();
+      document.querySelector(`[data-key-code="${evt.keyCode}"]`).classList.toggle('keyboard__button_active');
+    });
+    document.addEventListener('keyup', (evt) => {
+      evt.preventDefault();
+      document.querySelector(`[data-key-code="${evt.keyCode}"]`).classList.toggle('keyboard__button_active');
+    });
   }
 
   addButtons() {
@@ -25,13 +33,22 @@ class Keyboard {
     const keyCodes = Object.keys(keyMap);
     keyCodes.forEach((x) => {
       const button = document.createElement('div');
-      button.textContent = keyMap[x].key;
+      button.textContent = keyMap[x].key[this.capitalisation][this.lang];
       button.classList.add('keyboard__button');
       button.classList.add(`keyboard__button_width_${keyMap[x].width}`);
+      button.dataset.keyCode = keyMap[x].keyCode;
       fragment.appendChild(button);
     });
 
     return fragment;
+  }
+
+  switchLanguage() {
+    this.lang = this.lang === 'en' ? 'ru' : 'en';
+  }
+
+  shiftCapitalisation() {
+    this.capitalisation = this.capitalisation === 'normal' ? 'shifted' : 'normal';
   }
 }
 
