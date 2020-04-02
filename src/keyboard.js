@@ -18,14 +18,30 @@ class Keyboard {
     wrapper.appendChild(keyboard);
     keyboard.appendChild(this.addButtons());
     document.body.appendChild(wrapper);
+    const keyboardButtons = document.querySelectorAll('.keyboard__button');
     document.addEventListener('keydown', (evt) => {
-      evt.preventDefault();
-      document.querySelector(`[data-key-code="${evt.keyCode}"]`).classList.toggle('keyboard__button_active');
+      if (Object.keys(keyMap).includes(evt.code)) {
+        evt.preventDefault();
+        document.querySelector(`[data-code="${evt.code}"]`).classList.add('keyboard__button_active');
+      }
     });
     document.addEventListener('keyup', (evt) => {
-      evt.preventDefault();
-      document.querySelector(`[data-key-code="${evt.keyCode}"]`).classList.toggle('keyboard__button_active');
+      if (Object.keys(keyMap).includes(evt.code)) {
+        evt.preventDefault();
+        document.querySelector(`[data-code="${evt.code}"]`).classList.remove('keyboard__button_active');
+      }
     });
+    document.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('keyboard__button')) {
+        evt.target.classList.add('keyboard__button_active')
+        setTimeout(() => evt.target.classList.remove('keyboard__button_active'), 100);
+      }
+    });
+
+    const controlButtons = document.querySelectorAll('[data-code*="Control"]');
+    Array.from(controlButtons).forEach((x) => x.addEventListener('keydown', (evt) => {
+      console.log(evt);
+    }));
   }
 
   addButtons() {
@@ -36,7 +52,12 @@ class Keyboard {
       button.textContent = keyMap[x].key[this.capitalisation][this.lang];
       button.classList.add('keyboard__button');
       button.classList.add(`keyboard__button_width_${keyMap[x].width}`);
-      button.dataset.keyCode = keyMap[x].keyCode;
+      button.dataset.code = x;
+      button.dataset.lowEn = keyMap[x].key.normal.en;
+      button.dataset.lowRu = keyMap[x].key.normal.ru;
+      button.dataset.upEn = keyMap[x].key.shifted.en;
+      button.dataset.upRu = keyMap[x].key.shifted.ru;
+      button.dataset.type = keyMap[x].type;
       fragment.appendChild(button);
     });
 
