@@ -1,5 +1,12 @@
 html {
   box-sizing: border-box;
+  --keySize: 5vw;
+  --color-accent: #FEB062;
+  --color-accent-alt: #CC00CC;
+  --color-bg-alt: #2B0058;
+  --color-area: #575151;
+  --color-bgsoft: #2B2B2B;
+  --color-bg: #131313;
 }
 
 *, *:before, *:after {
@@ -9,7 +16,9 @@ html {
 body {
   padding: 0;
   margin: 0;
-  --keySize: 5vw;
+  background: linear-gradient(-45deg, var(--color-accent-alt), var(--color-bg), var(--color-bg-alt), var(--color-bgsoft));
+  background-size: 400% 400%;
+  animation: gradient 15s ease-out infinite;
 }
 
 .wrapper {
@@ -21,11 +30,6 @@ body {
   justify-content: center;
 }
 
-.keyboard {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .textarea {
   margin-bottom: 3vw;
   min-height: 15vw;
@@ -34,20 +38,50 @@ body {
   padding: 1vw;
   resize: none;
   font-size: 2vw;
+  color: var(--color-accent);
   overflow: auto;
   border: 2px solid #aaaaaa;
   border-radius: 1vw;
-  background-color: #dddddd;
+  background: rgba(254, 176, 98, 0.15);
+}
+
+.info {
+  margin-top: 3vw;
+  display: flex;
+  justify-content: space-around;
+  font-size: 2vw;
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.info span {
+  padding: 1vw;
+  background: var(--color-bgsoft);;
+  text-align: center;
+  font-size: 1.7vw;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--color-accent);
+  border: 0.1em solid  var(--color-accent);
+  border-radius: 0.5vw;
+}
+
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .keyboard__button {
   margin: 0.3vw;
   height: var(--keySize);
   padding-top: 2vw;
-  background-color: #777777;
+  background: var(--color-bgsoft);;
   text-align: center;
-  font-size: 1.6vw;
+  font-size: 1.7vw;
+  font-weight: bold;
   line-height: 1;
+  color: var(--color-accent);
+  border: 0.1em solid  var(--color-accent);
   border-radius: 0.5vw;
   transition: all 0.15s;
   user-select: none;
@@ -56,7 +90,14 @@ body {
 .keyboard__button_active {
   transform-origin: center;
   transform:scale(0.95);
-  background-color: #8aff00;
+  background-color: var(--color-accent);
+  color: var(--color-accent-alt);
+}
+
+.keyboard__button_capslock_active {
+  color: var(--color-accent-alt);
+  text-transform: uppercase;
+  text-effect: outline;
 }
 
 .keyboard__button_width_100 {
@@ -86,4 +127,17 @@ body {
 .keyboard__button_width_700 {
   width: calc(var(--keySize) * 7);
   flex-grow: 1;
+}
+
+
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }
