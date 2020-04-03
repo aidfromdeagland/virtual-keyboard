@@ -337,7 +337,7 @@ const buttonsMap = {
   },
   OSLeft: {
     keyCode: 91,
-    key: { normal: { en: 'system', ru: 'system' }, shifted: { en: 'system', ru: 'system' } },
+    key: { normal: { en: '⊞Win', ru: '⊞Win' }, shifted: { en: '⊞Win', ru: '⊞Win' } },
     type: 'func',
     width: '100',
   },
