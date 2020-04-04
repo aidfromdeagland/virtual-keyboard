@@ -87,7 +87,7 @@ const buttonsMap = {
     keyCode: 9,
     key: { normal: { en: 'tab', ru: 'tab' }, shifted: { en: 'tab', ru: 'tab' } },
     type: 'func',
-    width: '150',
+    width: '175',
   },
   KeyQ: {
     keyCode: 81,
@@ -249,7 +249,7 @@ const buttonsMap = {
     keyCode: 16,
     key: { normal: { en: 'shift', ru: 'shift' }, shifted: { en: 'shift', ru: 'shift' } },
     type: 'func',
-    width: '175',
+    width: '150',
   },
   KeyZ: {
     keyCode: 90,
@@ -315,7 +315,7 @@ const buttonsMap = {
     keyCode: 16,
     key: { normal: { en: 'shift', ru: 'shift' }, shifted: { en: 'shift', ru: 'shift' } },
     type: 'func',
-    width: '100',
+    width: '125',
   },
   ArrowUp: {
     keyCode: 38,
@@ -333,7 +333,7 @@ const buttonsMap = {
     keyCode: 17,
     key: { normal: { en: 'ctrl', ru: 'ctrl' }, shifted: { en: 'ctrl', ru: 'ctrl' } },
     type: 'func',
-    width: '100',
+    width: '125',
   },
   OSLeft: {
     keyCode: 91,
@@ -363,7 +363,7 @@ const buttonsMap = {
     keyCode: 17,
     key: { normal: { en: 'ctrl', ru: 'ctrl' }, shifted: { en: 'ctrl', ru: 'ctrl' } },
     type: 'func',
-    width: '175',
+    width: '125',
   },
   ArrowLeft: {
     keyCode: 37,

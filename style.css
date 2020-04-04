@@ -45,6 +45,10 @@ body {
   background: rgba(254, 176, 98, 0.15);
 }
 
+.textarea:focus {
+  outline: none;
+}
+
 .info {
   margin-top: 3vw;
   display: flex;
@@ -67,7 +71,6 @@ body {
 }
 
 .keyboard {
-  perspective: 50vw;
   display: flex;
   flex-wrap: wrap;
 }
