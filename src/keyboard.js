@@ -156,6 +156,7 @@ class Keyboard {
       document.dispatchEvent(new KeyboardEvent('keyup', { code: evt.target.dataset.code }));
       evt.target.removeEventListener('mouseup', mouseOffHandler);
       evt.target.removeEventListener('mouseout', mouseOffHandler);
+      textarea.focus();
     };
 
     document.addEventListener('mousedown', (evt) => {
