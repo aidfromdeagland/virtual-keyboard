@@ -2,7 +2,7 @@ import buttonsMap from './buttonsmap.js';
 
 class Keyboard {
   constructor() {
-    this.lang = 'en';
+    this.lang = localStorage.getItem('keyboardLang') || 'en';
     this.capitalisation = 'normal';
     this.capslocked = false;
   }
@@ -24,6 +24,7 @@ class Keyboard {
 
   switchLanguage() {
     this.lang = this.lang === 'en' ? 'ru' : 'en';
+    localStorage.setItem('keyboardLang', this.lang);
   }
 
   shiftCapitalisation() {
