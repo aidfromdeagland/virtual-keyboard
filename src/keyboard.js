@@ -7,6 +7,41 @@ class Keyboard {
     this.capslocked = false;
   }
 
+  addButtons() {
+    const fragment = document.createDocumentFragment();
+    const keyCodes = Object.keys(buttonsMap);
+    keyCodes.forEach((x) => {
+      const button = document.createElement('div');
+      button.textContent = buttonsMap[x].key[this.capitalisation][this.lang];
+      button.classList.add('keyboard__button');
+      button.classList.add(`keyboard__button_width_${buttonsMap[x].width}`);
+      button.dataset.code = x;
+      fragment.appendChild(button);
+    });
+
+    return fragment;
+  }
+
+  switchLanguage() {
+    this.lang = this.lang === 'en' ? 'ru' : 'en';
+  }
+
+  shiftCapitalisation() {
+    this.capitalisation = this.capitalisation === 'normal' ? 'shifted' : 'normal';
+  }
+
+  toggleCapslock() {
+    this.capslocked = this.capslocked !== true;
+  }
+
+  drawButtons() {
+    const keyboardButtons = document.querySelectorAll('.keyboard__button');
+    for (let i = 0; i < keyboardButtons.length; i += 1) {
+      keyboardButtons[i].textContent = buttonsMap[keyboardButtons[i].dataset.code]
+        .key[this.capitalisation][this.lang];
+    }
+  }
+
   init() {
     const wrapper = document.createElement('div');
     wrapper.classList.add('wrapper');
@@ -41,7 +76,12 @@ class Keyboard {
         document.querySelector(`[data-code="${evt.code}"]`).classList.add('keyboard__button_active');
 
         if (buttonsMap[evt.code].type === 'print') {
-          textarea.value += buttonsMap[evt.code].key[this.capitalisation][this.lang];
+          const startPos = textarea.selectionStart;
+          textarea.value = textarea.value.slice(0, textarea.selectionStart)
+            + buttonsMap[evt.code].key[this.capitalisation][this.lang]
+            + textarea.value.slice(textarea.selectionStart);
+          textarea.selectionStart = startPos + 1;
+          textarea.selectionEnd = textarea.selectionStart;
         } else if (buttonsMap[evt.code].type === 'func') {
           switch (evt.code) {
             case 'Backspace':
@@ -106,54 +146,23 @@ class Keyboard {
       }
     });
 
-    document.addEventListener('mousedown', (evt) => {
+    const mouseDownHandler = (evt) => {
       if (evt.target.classList.contains('keyboard__button')) {
-        evt.target.classList.add('keyboard__button_active');
-
-        evt.target.addEventListener('mouseup', mouseOffHandler);
-        evt.target.addEventListener('mouseout', mouseOffHandler);
+        document.dispatchEvent(new KeyboardEvent('keydown', { code: evt.target.dataset.code }));
       }
-    });
-    const mouseOffHandler = function (evt) {
-      evt.target.classList.remove('keyboard__button_active');
+    };
+
+    const mouseOffHandler = (evt) => {
+      document.dispatchEvent(new KeyboardEvent('keyup', { code: evt.target.dataset.code }));
       evt.target.removeEventListener('mouseup', mouseOffHandler);
       evt.target.removeEventListener('mouseout', mouseOffHandler);
     };
-  }
 
-  addButtons() {
-    const fragment = document.createDocumentFragment();
-    const keyCodes = Object.keys(buttonsMap);
-    keyCodes.forEach((x) => {
-      const button = document.createElement('div');
-      button.textContent = buttonsMap[x].key[this.capitalisation][this.lang];
-      button.classList.add('keyboard__button');
-      button.classList.add(`keyboard__button_width_${buttonsMap[x].width}`);
-      button.dataset.code = x;
-      fragment.appendChild(button);
+    document.addEventListener('mousedown', (evt) => {
+      mouseDownHandler(evt);
+      evt.target.addEventListener('mouseup', mouseOffHandler);
+      evt.target.addEventListener('mouseout', mouseOffHandler);
     });
-
-    return fragment;
-  }
-
-  switchLanguage() {
-    this.lang = this.lang === 'en' ? 'ru' : 'en';
-  }
-
-  shiftCapitalisation() {
-    this.capitalisation = this.capitalisation === 'normal' ? 'shifted' : 'normal';
-  }
-
-  toggleCapslock() {
-    this.capslocked = this.capslocked !== true;
-  }
-
-  drawButtons() {
-    const keyboardButtons = document.querySelectorAll('.keyboard__button');
-    for (let i = 0; i < keyboardButtons.length; i += 1) {
-      keyboardButtons[i].textContent = buttonsMap[keyboardButtons[i].dataset.code]
-        .key[this.capitalisation][this.lang];
-    }
   }
 }
 
