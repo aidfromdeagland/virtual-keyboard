@@ -4,7 +4,7 @@
   "description": "virtual keyboard task for RSschool 2020q1",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ./src",
+    "lint": "eslint **/*.js",
     "lint:fix": "eslint ./src --fix",
     "start": "browser-sync start --server --files \"src/*.js\""
   },
