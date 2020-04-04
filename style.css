@@ -40,7 +40,7 @@ body {
   font-size: 2vw;
   color: var(--color-accent);
   overflow: auto;
-  border: 2px solid #aaaaaa;
+  border: 0.15em solid var(--color-accent);
   border-radius: 1vw;
   background: rgba(254, 176, 98, 0.15);
 }
@@ -67,6 +67,7 @@ body {
 }
 
 .keyboard {
+  perspective: 50vw;
   display: flex;
   flex-wrap: wrap;
 }
@@ -81,17 +82,17 @@ body {
   font-weight: bold;
   line-height: 1;
   color: var(--color-accent);
-  border: 0.1em solid  var(--color-accent);
+  border: 0.1em solid var(--color-accent);
   border-radius: 0.5vw;
-  transition: all 0.15s;
+  transition: all 0.1s;
   user-select: none;
 }
 
 .keyboard__button_active {
   transform-origin: center;
-  transform:scale(0.95);
   background-color: var(--color-accent);
   color: var(--color-accent-alt);
+  transform: scale(0.95);
 }
 
 .keyboard__button_capslock_active {
