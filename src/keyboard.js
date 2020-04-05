@@ -24,7 +24,6 @@ class Keyboard {
 
   switchLanguage() {
     this.lang = this.lang === 'en' ? 'ru' : 'en';
-    localStorage.setItem('keyboardLang', this.lang);
   }
 
   shiftCapitalisation() {
@@ -52,8 +51,8 @@ class Keyboard {
     const keyboard = document.createElement('div');
     keyboard.classList.add('keyboard');
     const info = document.createElement('div');
-    info.innerHTML = '<div class="info__hint"><p>Switch language combo: <span>ctrl</span> + <span>shift</span></p></div>'
-      + '<div class="info__os"><p>Developed for WINDOWS OS<p></div>';
+    info.innerHTML = '<div class="info__hint"><p>Switch language combo: <span>alt</span> + <span>shift</span></p></div>'
+    + '<div class="info__os"><p>Developed for WINDOWS OS<p></div>';
     info.classList.add('info');
     wrapper.appendChild(keyboard);
     keyboard.appendChild(this.addButtons());
@@ -77,30 +76,43 @@ class Keyboard {
         document.querySelector(`[data-code="${evt.code}"]`).classList.add('keyboard__button_active');
 
         if (buttonsMap[evt.code].type === 'print') {
-          const startPos = textarea.selectionStart;
-          textarea.value = textarea.value.slice(0, textarea.selectionStart)
-            + buttonsMap[evt.code].key[this.capitalisation][this.lang]
-            + textarea.value.slice(textarea.selectionStart);
-          textarea.selectionStart = startPos + 1;
-          textarea.selectionEnd = textarea.selectionStart;
+          if (textarea.selectionStart === textarea.selectionEnd) {
+            const startPos = textarea.selectionStart;
+            textarea.value = textarea.value.slice(0, textarea.selectionStart)
+              + buttonsMap[evt.code].key[this.capitalisation][this.lang]
+              + textarea.value.slice(textarea.selectionStart);
+            textarea.selectionStart = startPos + 1;
+            textarea.selectionEnd = textarea.selectionStart;
+          } else {
+            textarea.setRangeText(buttonsMap[evt.code].key[this.capitalisation][this.lang]);
+            textarea.selectionEnd = textarea.selectionStart;
+          }
         } else if (buttonsMap[evt.code].type === 'func') {
           switch (evt.code) {
             case 'Backspace':
-              if (textarea.selectionStart > 0) {
-                const startPos = textarea.selectionStart;
-                textarea.value = textarea.value.slice(0, textarea.selectionStart - 1)
+              if (textarea.selectionStart === textarea.selectionEnd) {
+                if (textarea.selectionStart > 0) {
+                  const startPos = textarea.selectionStart;
+                  textarea.value = textarea.value.slice(0, textarea.selectionStart - 1)
                   + textarea.value.slice(textarea.selectionStart);
-                textarea.selectionStart = startPos - 1;
-                textarea.selectionEnd = textarea.selectionStart;
+                  textarea.selectionStart = startPos - 1;
+                  textarea.selectionEnd = textarea.selectionStart;
+                }
+              } else {
+                textarea.setRangeText('');
               }
               break;
             case 'Delete':
-              if (textarea.selectionStart < textarea.value.length) {
-                const startPos = textarea.selectionStart;
-                textarea.value = textarea.value.slice(0, textarea.selectionStart)
-                  + textarea.value.slice(textarea.selectionStart + 1);
-                textarea.selectionStart = startPos;
-                textarea.selectionEnd = textarea.selectionStart;
+              if (textarea.selectionStart === textarea.selectionEnd) {
+                if (textarea.selectionStart < textarea.value.length) {
+                  const startPos = textarea.selectionStart;
+                  textarea.value = textarea.value.slice(0, textarea.selectionStart)
+                    + textarea.value.slice(textarea.selectionStart + 1);
+                  textarea.selectionStart = startPos;
+                  textarea.selectionEnd = textarea.selectionStart;
+                }
+              } else {
+                textarea.setRangeText('');
               }
               break;
             case 'Tab':
@@ -125,13 +137,13 @@ class Keyboard {
           this.shiftCapitalisation();
           this.drawButtons();
 
-          if (evt.ctrlKey) {
+          if (evt.altKey) {
             this.switchLanguage();
             this.drawButtons();
           }
         }
 
-        if (evt.code === 'ControlLeft' || evt.code === 'ControlRight') {
+        if (evt.code === 'AltLeft' || evt.code === 'AltRight') {
           if (evt.shiftKey) {
             this.switchLanguage();
             this.drawButtons();
@@ -164,6 +176,10 @@ class Keyboard {
       mouseDownHandler(evt);
       evt.target.addEventListener('mouseup', mouseOffHandler);
       evt.target.addEventListener('mouseout', mouseOffHandler);
+    });
+
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('keyboardLang', this.lang);
     });
   }
 }
