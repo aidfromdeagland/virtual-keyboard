@@ -1,21 +1,28 @@
 import buttonsMap from './buttonsmap.js';
 
+const english = 'en';
+const russian = 'ru';
+const normalMode = 'normal';
+const shiftedMode = 'shifted';
+const storedLanguageItem = 'keyboardLang';
+
+
 class Keyboard {
   constructor() {
-    this.lang = localStorage.getItem('keyboardLang') || 'en';
-    this.capitalisation = 'normal';
+    this.lang = localStorage.getItem(storedLanguageItem) || english;
+    this.capitalisation = normalMode;
     this.capslocked = false;
   }
 
   addButtons() {
     const fragment = document.createDocumentFragment();
     const keyCodes = Object.keys(buttonsMap);
-    keyCodes.forEach((x) => {
+    keyCodes.forEach((key) => {
       const button = document.createElement('div');
-      button.textContent = buttonsMap[x].key[this.capitalisation][this.lang];
+      button.textContent = buttonsMap[key].key[this.capitalisation][this.lang];
       button.classList.add('keyboard__button');
-      button.classList.add(`keyboard__button_width_${buttonsMap[x].width}`);
-      button.dataset.code = x;
+      button.classList.add(`keyboard__button_width_${buttonsMap[key].width}`);
+      button.dataset.code = key;
       fragment.appendChild(button);
     });
 
@@ -23,15 +30,15 @@ class Keyboard {
   }
 
   switchLanguage() {
-    this.lang = this.lang === 'en' ? 'ru' : 'en';
+    this.lang = this.lang === english ? russian : english;
   }
 
   shiftCapitalisation() {
-    this.capitalisation = this.capitalisation === 'normal' ? 'shifted' : 'normal';
+    this.capitalisation = this.capitalisation === normalMode ? shiftedMode : normalMode;
   }
 
   toggleCapslock() {
-    this.capslocked = this.capslocked !== true;
+    this.capslocked = !this.capslocked;
   }
 
   drawButtons() {
@@ -52,7 +59,7 @@ class Keyboard {
     keyboard.classList.add('keyboard');
     const info = document.createElement('div');
     info.innerHTML = '<div class="info__hint"><p>Switch language combo: <span>alt</span> + <span>shift</span></p></div>'
-    + '<div class="info__os"><p>Developed for WINDOWS OS<p></div>';
+      + '<div class="info__os"><p>Developed for WINDOWS OS<p></div>';
     info.classList.add('info');
     wrapper.appendChild(keyboard);
     keyboard.appendChild(this.addButtons());
@@ -63,10 +70,10 @@ class Keyboard {
     capslockKey.classList.add('keyboard__button_capslock');
 
     document.addEventListener('keydown', (evt) => {
-      if (Object.keys(buttonsMap).includes(evt.code)) {
+      if (buttonsMap[evt.code]) {
         evt.preventDefault();
         if ((evt.code === 'ShiftLeft' || evt.code === 'ShiftRight')) {
-          if (!Array.from(shiftKeys).some((x) => x.classList.contains('keyboard__button_active'))) {
+          if (!Array.from(shiftKeys).some((element) => element.classList.contains('keyboard__button_active'))) {
             this.shiftCapitalisation();
           }
 
@@ -74,28 +81,28 @@ class Keyboard {
         }
 
         document.querySelector(`[data-code="${evt.code}"]`).classList.add('keyboard__button_active');
+        const startPosition = textarea.selectionStart;
+        const indent = '\t';
+        const lineBreak = '\n';
 
         if (buttonsMap[evt.code].type === 'print') {
-          if (textarea.selectionStart === textarea.selectionEnd) {
-            const startPos = textarea.selectionStart;
-            textarea.value = textarea.value.slice(0, textarea.selectionStart)
+          if (startPosition === textarea.selectionEnd) {
+            textarea.value = textarea.value.slice(0, startPosition)
               + buttonsMap[evt.code].key[this.capitalisation][this.lang]
               + textarea.value.slice(textarea.selectionStart);
-            textarea.selectionStart = startPos + 1;
-            textarea.selectionEnd = textarea.selectionStart;
           } else {
             textarea.setRangeText(buttonsMap[evt.code].key[this.capitalisation][this.lang]);
-            textarea.selectionEnd = textarea.selectionStart;
           }
+          textarea.selectionStart = startPosition + 1;
+          textarea.selectionEnd = textarea.selectionStart;
         } else if (buttonsMap[evt.code].type === 'func') {
           switch (evt.code) {
             case 'Backspace':
-              if (textarea.selectionStart === textarea.selectionEnd) {
-                if (textarea.selectionStart > 0) {
-                  const startPos = textarea.selectionStart;
-                  textarea.value = textarea.value.slice(0, textarea.selectionStart - 1)
-                  + textarea.value.slice(textarea.selectionStart);
-                  textarea.selectionStart = startPos - 1;
+              if (startPosition === textarea.selectionEnd) {
+                if (startPosition > 0) {
+                  textarea.value = textarea.value.slice(0, startPosition - 1)
+                    + textarea.value.slice(startPosition);
+                  textarea.selectionStart = startPosition - 1;
                   textarea.selectionEnd = textarea.selectionStart;
                 }
               } else {
@@ -103,12 +110,11 @@ class Keyboard {
               }
               break;
             case 'Delete':
-              if (textarea.selectionStart === textarea.selectionEnd) {
-                if (textarea.selectionStart < textarea.value.length) {
-                  const startPos = textarea.selectionStart;
-                  textarea.value = textarea.value.slice(0, textarea.selectionStart)
-                    + textarea.value.slice(textarea.selectionStart + 1);
-                  textarea.selectionStart = startPos;
+              if (startPosition === textarea.selectionEnd) {
+                if (startPosition < textarea.value.length) {
+                  textarea.value = textarea.value.slice(0, startPosition)
+                    + textarea.value.slice(startPosition + 1);
+                  textarea.selectionStart = startPosition;
                   textarea.selectionEnd = textarea.selectionStart;
                 }
               } else {
@@ -116,10 +122,26 @@ class Keyboard {
               }
               break;
             case 'Tab':
-              textarea.value += '\t';
+              if (startPosition === textarea.selectionEnd) {
+                textarea.value = textarea.value.slice(0, startPosition)
+                  + indent
+                  + textarea.value.slice(textarea.selectionStart);
+              } else {
+                textarea.setRangeText(indent);
+              }
+              textarea.selectionStart = startPosition + 1;
+              textarea.selectionEnd = textarea.selectionStart;
               break;
             case 'Enter':
-              textarea.value += '\n';
+              if (startPosition === textarea.selectionEnd) {
+                textarea.value = textarea.value.slice(0, startPosition)
+                  + lineBreak
+                  + textarea.value.slice(textarea.selectionStart);
+              } else {
+                textarea.setRangeText(lineBreak);
+              }
+              textarea.selectionStart = startPosition + 1;
+              textarea.selectionEnd = textarea.selectionStart;
               break;
             default:
               break;
@@ -129,7 +151,7 @@ class Keyboard {
     });
 
     document.addEventListener('keyup', (evt) => {
-      if (Object.keys(buttonsMap).includes(evt.code)) {
+      if (buttonsMap[evt.code]) {
         evt.preventDefault();
         document.querySelector(`[data-code="${evt.code}"]`).classList.remove('keyboard__button_active');
 
@@ -161,12 +183,12 @@ class Keyboard {
 
     const mouseDownHandler = (evt) => {
       if (evt.target.classList.contains('keyboard__button')) {
-        document.dispatchEvent(new KeyboardEvent('keydown', { code: evt.target.dataset.code }));
+        document.dispatchEvent(new KeyboardEvent('keydown', {code: evt.target.dataset.code}));
       }
     };
 
     const mouseOffHandler = (evt) => {
-      document.dispatchEvent(new KeyboardEvent('keyup', { code: evt.target.dataset.code }));
+      document.dispatchEvent(new KeyboardEvent('keyup', {code: evt.target.dataset.code}));
       evt.target.removeEventListener('mouseup', mouseOffHandler);
       evt.target.removeEventListener('mouseout', mouseOffHandler);
       textarea.focus();
@@ -179,7 +201,7 @@ class Keyboard {
     });
 
     window.addEventListener('beforeunload', () => {
-      localStorage.setItem('keyboardLang', this.lang);
+      localStorage.setItem(storedLanguageItem, this.lang);
     });
   }
 }
